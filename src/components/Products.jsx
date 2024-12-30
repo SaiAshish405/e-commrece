@@ -12,6 +12,7 @@ const Products = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("all");
   let componentMounted = true;
 
   const dispatch = useDispatch();
@@ -53,22 +54,18 @@ const Products = () => {
         <div className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
           <Skeleton height={592} />
         </div>
-        <div className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <Skeleton height={592} />
-        </div>
-        <div className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <Skeleton height={592} />
-        </div>
-        <div className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <Skeleton height={592} />
-        </div>
       </>
     );
   };
 
   const filterProduct = (cat) => {
-    const updatedList = data.filter((item) => item.category === cat);
-    setFilter(updatedList);
+    if (cat === "all") {
+      setFilter(data);
+    } else {
+      const updatedList = data.filter((item) => item.category === cat);
+      setFilter(updatedList);
+    }
+    setActiveCategory(cat); // Update the active category
   };
 
   const ShowProducts = () => {
@@ -76,31 +73,41 @@ const Products = () => {
       <>
         <div className="buttons text-center py-5">
           <button
-            className="btn btn-outline-dark btn-sm m-2"
-            onClick={() => setFilter(data)}
+            className={`btn ${
+              activeCategory === "all" ? "btn-dark" : "btn-outline-dark"
+            } btn-sm m-2`}
+            onClick={() => filterProduct("all")}
           >
             All
           </button>
           <button
-            className="btn btn-outline-dark btn-sm m-2"
+            className={`btn ${
+              activeCategory === "men's clothing" ? "btn-dark" : "btn-outline-dark"
+            } btn-sm m-2`}
             onClick={() => filterProduct("men's clothing")}
           >
             Men's Clothing
           </button>
           <button
-            className="btn btn-outline-dark btn-sm m-2"
+            className={`btn ${
+              activeCategory === "women's clothing" ? "btn-dark" : "btn-outline-dark"
+            } btn-sm m-2`}
             onClick={() => filterProduct("women's clothing")}
           >
             Women's Clothing
           </button>
           <button
-            className="btn btn-outline-dark btn-sm m-2"
+            className={`btn ${
+              activeCategory === "jewelery" ? "btn-dark" : "btn-outline-dark"
+            } btn-sm m-2`}
             onClick={() => filterProduct("jewelery")}
           >
             Jewelery
           </button>
           <button
-            className="btn btn-outline-dark btn-sm m-2"
+            className={`btn ${
+              activeCategory === "electronics" ? "btn-dark" : "btn-outline-dark"
+            } btn-sm m-2`}
             onClick={() => filterProduct("electronics")}
           >
             Electronics
@@ -131,8 +138,6 @@ const Products = () => {
                 </div>
                 <ul className="list-group list-group-flush">
                   <li className="list-group-item lead">$ {product.price}</li>
-                  {/* <li className="list-group-item">Dapibus ac facilisis in</li>
-                    <li className="list-group-item">Vestibulum at eros</li> */}
                 </ul>
                 <div className="card-body">
                   <Link
@@ -158,6 +163,7 @@ const Products = () => {
       </>
     );
   };
+
   return (
     <>
       <div className="container my-3 py-3">
